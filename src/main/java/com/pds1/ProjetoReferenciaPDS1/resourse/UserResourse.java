@@ -17,7 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.pds1.ProjetoReferenciaPDS1.dto.UserDTO;
 import com.pds1.ProjetoReferenciaPDS1.dto.UserInsertDTO;
-import com.pds1.ProjetoReferenciaPDS1.entities.User;
 import com.pds1.ProjetoReferenciaPDS1.services.UserService;
 
 @RestController
