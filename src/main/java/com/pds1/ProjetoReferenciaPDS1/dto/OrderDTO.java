@@ -3,6 +3,7 @@ package com.pds1.ProjetoReferenciaPDS1.dto;
 import java.io.Serializable;
 import java.time.Instant;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pds1.ProjetoReferenciaPDS1.entities.Order;
 import com.pds1.ProjetoReferenciaPDS1.entities.User;
 import com.pds1.ProjetoReferenciaPDS1.entities.enums.OrderStatus;
@@ -12,7 +13,9 @@ import com.pds1.ProjetoReferenciaPDS1.entities.enums.OrderStatus;
 public class OrderDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	private Long id;	
+	private Long id;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'",timezone = "GMT")
 	private Instant moment;	
 	private OrderStatus orderStatus;
 	private Long clientId;
