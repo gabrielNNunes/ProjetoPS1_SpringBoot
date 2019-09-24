@@ -1,49 +1,36 @@
 package com.pds1.ProjetoReferenciaPDS1.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.pds1.ProjetoReferenciaPDS1.entities.Product;
 
-public class ProductDTO implements Serializable{
+public class ProductCategoriesDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	private Long id;
 	private String name;
 	private String description;
 	private Double price;
 	private String imgUrl;
 	
-	public ProductDTO(){		
+	private List<CategoryDTO> categories = new ArrayList<>();
+	
+	public ProductCategoriesDTO(){
 	}
 
-	public ProductDTO(Long id, String name, String description, Double price, String imgUrl) {
-		super();
-		this.id = id;
+	public ProductCategoriesDTO(String name, String description, Double price, String imgUrl) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
 	}
 	
-	public ProductDTO(Product entity){
-		setId(entity.getId());
+	public ProductCategoriesDTO(Product entity) {		
 		setName(entity.getName());
 		setDescription(entity.getDescription());
 		setPrice(entity.getPrice());
 		setImgUrl(entity.getImgUrl());
-		/*this.id = entity.getId();
-		this.name = entity.getName();
-		this.description = entity.getDescription();
-		this.price = entity.getPrice();
-		this.imgUrl = entity.getImgUrl();*/
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -77,9 +64,14 @@ public class ProductDTO implements Serializable{
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
-	
-	public Product toEntity(){
-		return new Product(id, name, description, price, imgUrl);
+
+	public List<CategoryDTO> getCategories() {
+		return categories;
 	}
+
+	public Product toEntity(){
+		return new Product(null, name, description, price, imgUrl);
+	}
+	
 	
 }
