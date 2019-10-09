@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pds1.ProjetoReferenciaPDS1.dto.CredentialsDTO;
+import com.pds1.ProjetoReferenciaPDS1.dto.EmailDTO;
 import com.pds1.ProjetoReferenciaPDS1.dto.TokenDTO;
 import com.pds1.ProjetoReferenciaPDS1.services.AuthService;
 
@@ -18,15 +19,21 @@ public class AuthResourse {
 	@Autowired
 	private AuthService service;
 	
-	@PostMapping("/login")
+	@PostMapping(value = "/login")
 	public ResponseEntity<TokenDTO> login(@RequestBody CredentialsDTO dto){
 		TokenDTO tokenDTO = service.authenticate(dto);
 		return ResponseEntity.ok().body(tokenDTO);
 	}
 	
-	@PostMapping("/refresh")
+	@PostMapping(value = "/refresh")
 	public ResponseEntity<TokenDTO> refresh(){
 		TokenDTO tokenDTO = service.refreshToken();
 		return ResponseEntity.ok().body(tokenDTO);
+	}
+	
+	@PostMapping(value = "/forgot")
+	public ResponseEntity<Void> forgot(@RequestBody EmailDTO dto){
+		service.sendNewPassword(dto.getEmail());
+		return ResponseEntity.noContent().build();
 	}
 }
