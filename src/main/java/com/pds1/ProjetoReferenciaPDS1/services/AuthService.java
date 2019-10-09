@@ -4,17 +4,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pds1.ProjetoReferenciaPDS1.dto.CredentialsDTO;
 import com.pds1.ProjetoReferenciaPDS1.dto.TokenDTO;
+import com.pds1.ProjetoReferenciaPDS1.entities.User;
+import com.pds1.ProjetoReferenciaPDS1.repositories.UserRepository;
 import com.pds1.ProjetoReferenciaPDS1.security.JWTUtil;
 
 import services.exceptions.JWTAuthenticationException;
+import services.exceptions.JWTAuthorizationException;
 
 @Service
 public class AuthService {
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -33,4 +41,20 @@ public class AuthService {
 			throw new JWTAuthenticationException("Bad credentials");
 		}
 	}
+	public User authenticated(){
+		try {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return userRepository.findByEmail(userDetails.getUsername());
+		}catch(Exception e){
+			throw new JWTAuthenticationException("Access denied");
+		}
+	}
+	
+	public void validateSelfOrAdmin(Long userId) {
+		User user = authenticated();
+		if(user == null || (!user.getId().equals(userId)) && !user.hasRole("ROLE_ADMIN")){
+			throw new JWTAuthorizationException("Access denied");
+		}
+	}
+	
 }
