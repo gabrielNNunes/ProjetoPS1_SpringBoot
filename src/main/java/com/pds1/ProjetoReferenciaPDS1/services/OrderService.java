@@ -15,6 +15,7 @@ import com.pds1.ProjetoReferenciaPDS1.entities.Order;
 import com.pds1.ProjetoReferenciaPDS1.entities.OrderItem;
 import com.pds1.ProjetoReferenciaPDS1.entities.User;
 import com.pds1.ProjetoReferenciaPDS1.repositories.OrderRepository;
+import com.pds1.ProjetoReferenciaPDS1.repositories.UserRepository;
 
 import services.exceptions.ResourceNotFoundException;
 
@@ -23,6 +24,9 @@ public class OrderService {
 	
 	@Autowired
 	private OrderRepository repository;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Autowired
 	private AuthService authService;
@@ -48,6 +52,12 @@ public class OrderService {
 			authService.validadeOwnOrderOrAdmin(order);
 			Set<OrderItem> set = order.getItems();
 		return set.stream().map(e -> new OrderItemDTO(e)).collect(Collectors.toList());
+	}
+	@Transactional(readOnly = true)
+	public List<OrderDTO> findByClientId(Long clientId) {
+		User client = userRepository.getOne(clientId);
+		List<Order> list = repository.findByClient(client);
+		return list.stream().map(e -> new OrderDTO(e)).collect(Collectors.toList());
 	}
 	
 	
