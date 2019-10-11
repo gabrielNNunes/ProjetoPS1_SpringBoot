@@ -2,6 +2,7 @@ package com.pds1.ProjetoReferenciaPDS1.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
@@ -14,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pds1.ProjetoReferenciaPDS1.dto.CategoryDTO;
 import com.pds1.ProjetoReferenciaPDS1.entities.Category;
+import com.pds1.ProjetoReferenciaPDS1.entities.Product;
 import com.pds1.ProjetoReferenciaPDS1.repositories.CategoryRepository;
+import com.pds1.ProjetoReferenciaPDS1.repositories.ProductRepository;
 
 import services.exceptions.DatabaseException;
 import services.exceptions.ResourceNotFoundException;
@@ -24,6 +27,9 @@ public class CategoryService {
 	
 	@Autowired
 	private CategoryRepository repository;
+	
+	@Autowired
+	private ProductRepository productRepository;
 	
 	public List<CategoryDTO> findAll(){
 		List<Category> list = repository.findAll();
@@ -63,5 +69,12 @@ public class CategoryService {
 	private void updateData(Category entity, CategoryDTO dto) {
 		entity.setName(dto.getName());		
 		
+	}
+	
+	@Transactional(readOnly = true)
+	public List<CategoryDTO> findByProduct(Long productId) {
+		Product product = productRepository.getOne(productId);
+		Set<Category> set = product.getCategories();
+		return set.stream().map(e -> new CategoryDTO(e)).collect(Collectors.toList());
 	}
 }
