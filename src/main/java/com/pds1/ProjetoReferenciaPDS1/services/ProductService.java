@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,6 +99,29 @@ public class ProductService {
 		Category category = categoryRepository.getOne(categoryId);
 		Page<Product> products = repository.findByCategory(category,pageable);		
 		return products.map(e -> new ProductDTO(e));
+	}
+	@Transactional
+	public void addCategory(Long id, CategoryDTO dto) {
+		Product product = repository.getOne(id);
+		Category category = categoryRepository.getOne(dto.getId());
+		product.getCategories().add(category);
+		repository.save(product);
+	}
+	
+	@Transactional
+	public void removeCategory(Long id, CategoryDTO dto) {
+		Product product = repository.getOne(id);
+		Category category = categoryRepository.getOne(dto.getId());
+		product.getCategories().remove(category);
+		repository.save(product);
+	}
+	
+	@Transactional
+	public void setCategories(Long id, List<CategoryDTO> dto){
+		Product product = repository.getOne(id);
+		setProductCategories(product, dto);
+		repository.save(product);
+		
 	}
 	
 	

@@ -1,6 +1,7 @@
 package com.pds1.ProjetoReferenciaPDS1.resourse;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.pds1.ProjetoReferenciaPDS1.dto.CategoryDTO;
 import com.pds1.ProjetoReferenciaPDS1.dto.ProductCategoriesDTO;
 import com.pds1.ProjetoReferenciaPDS1.dto.ProductDTO;
 import com.pds1.ProjetoReferenciaPDS1.services.ProductService;
@@ -82,6 +84,27 @@ public class ProductResourse {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Void> delete(@PathVariable Long id){
 		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping(value = "/{id}/addcategory")
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	public ResponseEntity<Void> addCategory(@PathVariable Long id,@RequestBody CategoryDTO dto){
+		service.addCategory(id, dto);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping(value = "/{id}/removecategory")
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	public ResponseEntity<Void> removeCategory(@PathVariable Long id,@RequestBody CategoryDTO dto){
+		service.removeCategory(id, dto);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping(value = "/{id}/setcategories")
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	public ResponseEntity<Void> setCategories(@PathVariable Long id,@RequestBody List<CategoryDTO> dto){
+		service.setCategories(id, dto);
 		return ResponseEntity.noContent().build();
 	}
 }
