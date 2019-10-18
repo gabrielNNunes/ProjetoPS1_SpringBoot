@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.pds1.ProjetoReferenciaPDS1.dto.CategoryDTO;
 import com.pds1.ProjetoReferenciaPDS1.dto.OrderDTO;
 import com.pds1.ProjetoReferenciaPDS1.dto.OrderItemDTO;
 import com.pds1.ProjetoReferenciaPDS1.services.OrderService;
